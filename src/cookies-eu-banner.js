@@ -69,10 +69,11 @@
     showBanner: function () {
       var _this = this,
         getElementById = document.getElementById.bind(document),
+        getElementsByClassName = document.getElementsByClassName.bind(document),
         banner = getElementById('cookies-eu-banner'),
-        rejectButton = getElementById('cookies-eu-reject'),
-        acceptButton = getElementById('cookies-eu-accept'),
-        moreLink = getElementById('cookies-eu-more'),
+        rejectButton = getElementsByClassName('cookies-eu-reject'),
+        acceptButton = getElementsByClassName('cookies-eu-accept'),
+        moreLink = getElementsByClassName('cookies-eu-more'),
         waitRemove = (banner.dataset.waitRemove === undefined) ? 0 : parseInt(banner.dataset.waitRemove),
         // Variables for minification optimization
         addClickListener = this.addClickListener,
@@ -80,28 +81,35 @@
 
       banner.style.display = 'block';
 
-      if (moreLink) {
-        addClickListener(moreLink, function () {
-          _this.deleteCookie(_this.cookieName);
-        });
+      if (0 < moreLink.length) {
+          Array.from(moreLink).forEach(function (l) {
+              addClickListener(l, function () {
+                  _this.deleteCookie(_this.cookieName);
+              });
+          });
       }
 
-      if (acceptButton) {
-        addClickListener(acceptButton, function () {
-          removeBanner();
-          _this.setConsent(true);
-          _this.launchFunction();
-        });
+      if (0 < acceptButton.length) {
+          Array.from(acceptButton).forEach(function (a) {
+              addClickListener(a, function () {
+                  removeBanner();
+                  _this.setConsent(true);
+                  _this.launchFunction();
+              });
+
+          });
       }
 
-      if (rejectButton) {
-        addClickListener(rejectButton, function () {
-          removeBanner();
-          _this.setConsent(false);
+      if (0 < rejectButton.length) {
+          Array.from(rejectButton).forEach(function (b) {
+              addClickListener(b, function () {
+                  removeBanner();
+                  _this.setConsent(false);
 
-          // Delete existing tracking cookies
-          _this.trackingCookiesNames.map(_this.deleteCookie);
-        });
+                  // Delete existing tracking cookies
+                  _this.trackingCookiesNames.map(_this.deleteCookie);
+              });
+          });
       }
     },
 
